@@ -28,6 +28,11 @@ tm.define("tmapp.Enemy", {
         this.rotation.x += 0.01;
         this.rotation.z += 0.01;
 
+        if (this.position.z > 10) {
+            this.remove();
+            delete threeObject;
+        }
+
         this.time++;
     },
 
