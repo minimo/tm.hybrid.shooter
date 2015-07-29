@@ -1,6 +1,5 @@
 /*
  *  main.js
- *  2015/07/28
  *  @auther minimo  
  *  This Program is MIT license.
  */

@@ -1,6 +1,5 @@
 /*
  *  gameScene.js
- *  2015/07/28
  *  @auther minimo  
  *  This Program is MIT license.
  */
@@ -10,11 +9,11 @@ tm.define("tmapp.gameScene", {
         this.superInit();
 
         // カメラ調整
-        this.camera.setPosition(0, 0, 30);
-        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        this.camera.setPosition(0, 0, 0);
+        this.camera.lookAt(new THREE.Vector3(0, 0, 10));
 
         // ライト
-        this.directionalLight.setPosition(0, 100, -80);
+        this.directionalLight.setPosition(0, 100, 80);
 
         this.time = 1;
     },
@@ -24,15 +23,19 @@ tm.define("tmapp.gameScene", {
         this.time++;
     },
 
+    enterLaser: function(target) {
+        var laser = tmapp.Laser(target.x, target.y, target.z).addChildTo(this);
+    },
+
     enterEnemy: function() {
         var x = (Math.random()*100).floor()-50;
         var y = (Math.random()*100).floor()-50;
         var enemy = tmapp.Enemy()
             .addChildTo(this)
-            .setPosition(x, y, -1000);
+            .setPosition(x, y, 1000);
     },
 
-    checkCollision: function(x, y) {
+    hitTest: function(x, y) {
         // Get Camera & scene object
         var camera = this.camera.threeObject;
         var scene = this.three.threeObject;
@@ -48,11 +51,8 @@ tm.define("tmapp.gameScene", {
 
         // Intersect object
         var obj = ray.intersectObjects(scene.children);
-
-        if (obj.length > 0) {
-            var target = obj[0].object.hybridObject;
-            target.damage(100);
-        }
+        if (obj.length > 0) return obj[0].object.hybridObject;
+        return null;
     },
 
     ontouchstart: function(e) {
@@ -62,6 +62,10 @@ tm.define("tmapp.gameScene", {
     },
 
     ontouchend: function(e) {
-        this.checkCollision(e.pointing.x, e.pointing.y);
+        var target = this.hitTest(e.pointing.x, e.pointing.y);
+        if (target) {
+            this.enterLaser(target);
+            target.damage(1000);
+        }
     },
 });
