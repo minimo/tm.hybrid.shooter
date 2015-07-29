@@ -22,6 +22,7 @@ tm.main(function() {
     app.replaceScene(tm.game.LoadingScene({
         width: SC_W, height: SC_H,
         assets: {
+            Orbitron: "fonts/Orbitron-Regular.ttf",
         },
         nextScene: tmapp.gameScene,
     }));
