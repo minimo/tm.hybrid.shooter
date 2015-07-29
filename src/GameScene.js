@@ -15,6 +15,13 @@ tm.define("tmapp.gameScene", {
         // ライト
         this.directionalLight.setPosition(0, 100, 80);
 
+        //ゲージ
+        this.gauage = tmapp.PowerGauage()
+            .addChildTo(this)
+            .setPosition(SC_W-60, SC_H-60);
+        this.gauage.tweener.clear();
+        this.gauage.tweener.to({value: 0}, 1000).wait(500).to({value: 100}, 1000).wait(500).setLoop(true);
+
         this.time = 1;
     },
 
@@ -33,6 +40,7 @@ tm.define("tmapp.gameScene", {
         var enemy = tmapp.Enemy()
             .addChildTo(this)
             .setPosition(x, y, 1000);
+        enemy.parentScene = this;
     },
 
     hitTest: function(x, y) {
