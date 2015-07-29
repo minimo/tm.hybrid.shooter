@@ -39,11 +39,16 @@ tm.define("tmapp.Enemy", {
         power = power || 0;
         this.hp -= power;
         if (this.hp < 0) {
+            this.explode();
             this.remove();
             delete threeObject;
             return true;
         }
         return false;
+    },
+
+    explode: function() {
+        var scene = this.parentScene;
     },
 });
 
