@@ -24,7 +24,7 @@ tm.define("tmapp.gameScene", {
     },
 
     enterLaser: function(target) {
-        var laser = tmapp.Laser(target.x, target.y, target.z).addChildTo(this);
+        var laser = tmapp.Laser(target).addChildTo(this);
     },
 
     enterEnemy: function() {
@@ -56,16 +56,16 @@ tm.define("tmapp.gameScene", {
     },
 
     ontouchstart: function(e) {
+        var target = this.hitTest(e.pointing.x, e.pointing.y);
+        if (target) {
+            this.enterLaser(target);
+            target.damage(1000);
+        }
     },
 
     ontouchmove: function(e) {
     },
 
     ontouchend: function(e) {
-        var target = this.hitTest(e.pointing.x, e.pointing.y);
-        if (target) {
-            this.enterLaser(target);
-            target.damage(1000);
-        }
     },
 });
