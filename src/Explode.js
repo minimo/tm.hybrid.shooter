@@ -1,16 +1,16 @@
 /*
- *  Enemy.js
+ *  Explode.js
  *  @auther minimo  
  *  This Program is MIT license.
  */
 (function() {
 
-tm.define("tmapp.Enemy", {
+tm.define("tmapp.Explode", {
     superClass: "tm.hybrid.Mesh",
     init: function() {
         // 形状データとか準備
         var geo = THREE.CubeGeometry(10, 10, 10);
-        var mat = new THREE.MeshPhongMaterial({color: "rgb(128,128,128)"});
+        var mat = new THREE.MeshPhoneMaterial({color: "rgb(255,0,0)"});
         var mesh = new THREE.Mesh(geo, mat);
 
         this.superInit(mesh);

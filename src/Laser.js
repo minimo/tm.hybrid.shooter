@@ -14,7 +14,7 @@ tm.define("tmapp.Laser", {
         var z = target.z;
 
         // 形状データとか準備
-        var geo = THREE.CubeGeometry(1, 1, Math.abs(z)+1000);
+        var geo = THREE.CubeGeometry(1, 1, Math.abs(z)+10);
         var mat = new THREE.MeshLambertMaterial({color: 0x00ffff});
         var mesh = new THREE.Mesh(geo, mat);
 
