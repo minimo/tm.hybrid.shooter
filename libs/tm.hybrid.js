@@ -460,9 +460,9 @@ THE SOFTWARE.
                     } else if (asset instanceof tm.asset.Vox) {
                         this.superInit(asset.mesh.clone());
                     } else if (asset instanceof tm.asset.MQO) {
-                        this.superInit(asset.model.meshes[0]);
+                        this.superInit(asset.model.meshes[0].clone());
                         for (var i = 1; i < asset.model.meshes.length; i++) {
-                            tm.hybrid.Mesh(asset.model.meshes[i]).addChildTo(this);
+                            tm.hybrid.Mesh(asset.model.meshes[i].clone()).addChildTo(this);
                         }
                     }
                 } else {
@@ -684,7 +684,7 @@ THE SOFTWARE.
             geometryParam = {}.$extend(tm.hybrid.PlaneMesh.DEFAULT_GEOMETRY_PARAM, geometryParam);
             materialParam = {}.$extend(tm.hybrid.PlaneMesh.DEFAULT_MATERIAL_PARAM, materialParam);
             var geo = new THREE.PlaneGeometry(geometryParam.width, geometryParam.height, geometryParam.widthSegments, geometryParam.heightSegments);
-            var mat = new THREE.MeshLambertMaterial(materialParam);
+            var mat = new THREE.MeshPhongMaterial(materialParam);
             this.superInit(new THREE.Mesh(geo, mat));
         },
     });
@@ -705,7 +705,7 @@ THE SOFTWARE.
             geometryParam = {}.$extend(tm.hybrid.BoxMesh.DEFAULT_GEOMETRY_PARAM, geometryParam);
             materialParam = {}.$extend(tm.hybrid.BoxMesh.DEFAULT_MATERIAL_PARAM, materialParam);
             var geo = new THREE.BoxGeometry(geometryParam.width, geometryParam.height, geometryParam.depth, geometryParam.widthSegments, geometryParam.heightSegments, geometryParam.depthSegments);
-            var mat = new THREE.MeshLambertMaterial(materialParam);
+            var mat = new THREE.MeshPhongMaterial(materialParam);
             this.superInit(new THREE.Mesh(geo, mat));
         },
     });
@@ -853,7 +853,7 @@ THE SOFTWARE.
         },
 
         render: function(renderer) {
-            if (this.effectComposer) {
+            if (this.effectComposer && this.effectComposer.passes.length > 1) {
                 this.effectComposer.render();
             } else {
                 renderer.render(this.three.scene, this.three.camera.threeObject);
@@ -875,6 +875,26 @@ THE SOFTWARE.
                 tm.app.Scene.prototype.removeChild.call(this, child);
             }
         },
+        
+        enableEffectComposer: function() {
+            if (THREE.EffectComposer && THREE.RenderPass) {
+
+                var renderTarget = new THREE.WebGLRenderTarget(this.app.width, this.app.height, {
+                    minFilter: THREE.LinearFilter,
+                    magFilter: THREE.LinearFilter,
+                    format: THREE.RGBFormat,
+                    stencilBuffer: false,
+                });
+                var renderPass = new THREE.RenderPass(this.three.scene, this.three.camera.threeObject);
+
+                this.effectComposer = new THREE.EffectComposer(this.app.threeRenderer, renderTarget);
+                this.effectComposer.addPass(renderPass);
+
+                return true;
+            } else {
+                return false;
+            }
+        },
     });
     tm.hybrid.Scene.prototype.accessor("camera", {
         get: function() {
@@ -884,6 +904,9 @@ THE SOFTWARE.
             this.three.camera = v;
         },
     });
+    tm.hybrid.Scene.prototype.getCamera = function() { return this.camera };
+    tm.hybrid.Scene.prototype.setCamera = function(v) { this.camera = v; return this };
+
     tm.hybrid.Scene.prototype.accessor("ambientLight", {
         get: function() {
             return this.three.ambientLight;
@@ -892,6 +915,9 @@ THE SOFTWARE.
             this.three.ambientLight = v;
         },
     });
+    tm.hybrid.Scene.prototype.getAmbientLight = function() { return this.ambientLight };
+    tm.hybrid.Scene.prototype.setAmbientLight = function(v) { this.ambientLight = v; return this };
+
     tm.hybrid.Scene.prototype.accessor("directionalLight", {
         get: function() {
             return this.three.directionalLight;
@@ -900,6 +926,8 @@ THE SOFTWARE.
             this.three.directionalLight = v;
         },
     });
+    tm.hybrid.Scene.prototype.getDirectionalLight = function() { return this.directionalLight };
+    tm.hybrid.Scene.prototype.setDirectionalLight = function(v) { this.directionalLight = v; return this };
 
     tm.hybrid.Scene.prototype.accessor("fog", {
         get: function() {
@@ -909,6 +937,9 @@ THE SOFTWARE.
             this.three.scene.fog = v;
         },
     });
+    tm.hybrid.Scene.prototype.isFog = function() { return this.fog };
+    tm.hybrid.Scene.prototype.setFog = function(v) { this.fog = v; return this };
+
     tm.hybrid.Scene.prototype.accessor("fogColor", {
         get: function() {
             return this.three.scene.fog.color;
@@ -917,6 +948,9 @@ THE SOFTWARE.
             this.three.scene.fog.color = v;
         },
     });
+    tm.hybrid.Scene.prototype.getFogColor = function() { return this.fogColor };
+    tm.hybrid.Scene.prototype.setFogColor = function(v) { this.fogColor = v; return this };
+
     tm.hybrid.Scene.prototype.accessor("fogNear", {
         get: function() {
             return this.three.scene.fog.near;
@@ -925,6 +959,9 @@ THE SOFTWARE.
             this.three.scene.fog.near = v;
         },
     });
+    tm.hybrid.Scene.prototype.getFogNear = function() { return this.fogNear };
+    tm.hybrid.Scene.prototype.setFogNear = function(v) { this.fogNear = v; return this };
+
     tm.hybrid.Scene.prototype.accessor("fogFar", {
         get: function() {
             return this.three.scene.fog.far;
@@ -933,6 +970,8 @@ THE SOFTWARE.
             this.three.scene.fog.far = v;
         },
     });
+    tm.hybrid.Scene.prototype.getFogFar = function() { return this.fogFar };
+    tm.hybrid.Scene.prototype.setFogFar = function(v) { this.fogFar = v; return this };
 
     tm.hybrid.Scene.prototype.accessor("overrideMaterial", {
         get: function() {
@@ -942,6 +981,8 @@ THE SOFTWARE.
             this.three.scene.overrideMaterial = v;
         },
     });
+    tm.hybrid.Scene.prototype.getOverrideMaterial = function() { return this.overrideMaterial };
+    tm.hybrid.Scene.prototype.setOverrideMaterial = function(v) { this.overrideMaterial = v; return this };
 
     tm.hybrid.Scene.prototype.accessor("autoUpdate", {
         get: function() {
@@ -951,6 +992,8 @@ THE SOFTWARE.
             this.three.scene.autoUpdate = v;
         },
     });
+    tm.hybrid.Scene.prototype.isAutoUpdate = function() { return this.autoUpdate };
+    tm.hybrid.Scene.prototype.setAutoUpdate = function(v) { this.autoUpdate = v; return this };
 
     tm.define("tm.hybrid.Scene.Three", {
         superClass: "tm.hybrid.ThreeElement",
@@ -1112,7 +1155,7 @@ tm.hybrid = tm.hybrid || {};
 
     tm.hybrid = tm.hybrid || {};
 
-    tm.hybrid.ColorConv = {
+    tm.hybrid.ColorConverter = {
         hsl: function(h, s, l) {
             if (arguments.length === 1 && typeof(arguments[0]) === "string") {
                 var m = arguments[0].split(" ").join("").match(/hsl\((\d+),(\d+)%,(\d+)%\)/);
@@ -1217,6 +1260,132 @@ tm.hybrid = tm.hybrid || {};
     tm.hybrid.Utils = {
         
     };
+})();
+
+/*
+ * effect.js
+ */
+(function() {
+    
+    tm.hybrid = tm.hybrid || {};
+    
+    tm.hybrid.EffectModules = [
+
+        "postprocessing/AdaptiveToneMappingPass",
+        "postprocessing/BloomPass",
+        "postprocessing/BokehPass",
+        "postprocessing/DotScreenPass",
+        "postprocessing/EffectComposer",
+        "postprocessing/FilmPass",
+        "postprocessing/GlitchPass",
+        "postprocessing/MaskPass",
+        "postprocessing/RenderPass",
+        "postprocessing/SavePass",
+        "postprocessing/ShaderPass",
+        "postprocessing/TexturePass",
+
+        "shaders/BasicShader",
+        "shaders/BleachBypassShader",
+        "shaders/BlendShader",
+        "shaders/BokehShader",
+        "shaders/BokehShader2",
+        "shaders/BrightnessContrastShader",
+        "shaders/ColorCorrectionShader",
+        "shaders/ColorifyShader",
+        "shaders/ConvolutionShader",
+        "shaders/CopyShader",
+        "shaders/DOFMipMapShader",
+        "shaders/DigitalGlitch",
+        "shaders/DotScreenShader",
+        "shaders/EdgeShader",
+        "shaders/EdgeShader2",
+        "shaders/FXAAShader",
+        "shaders/FilmShader",
+        "shaders/FocusShader",
+        "shaders/FresnelShader",
+        "shaders/HorizontalBlurShader",
+        "shaders/HorizontalTiltShiftShader",
+        "shaders/HueSaturationShader",
+        "shaders/KaleidoShader",
+        "shaders/LuminosityShader",
+        "shaders/MirrorShader",
+        "shaders/NormalDisplacementShader",
+        "shaders/NormalMapShader",
+        "shaders/OceanShaders",
+        "shaders/ParallaxShader",
+        "shaders/RGBShiftShader",
+        "shaders/SSAOShader",
+        "shaders/SepiaShader",
+        "shaders/TechnicolorShader",
+        "shaders/ToneMapShader",
+        "shaders/TriangleBlurShader",
+        "shaders/UnpackDepthRGBAShader",
+        "shaders/VerticalBlurShader",
+        "shaders/VerticalTiltShiftShader",
+        "shaders/VignetteShader",
+        
+    ].reduce(function(obj, _) {
+        var url = "https://cdn.rawgit.com/mrdoob/three.js/r71/examples/js/" + _ + ".js";
+        obj[url] = url;
+        return obj;
+    }, {});
+
+})();
+
+/*
+ * geom.js
+ */
+
+(function() {
+    
+    tm.geom.Vector2.prototype.toThree = function() {
+        return new THREE.Vector2(this.x, this.y);
+    };
+    THREE.Vector2.prototype.toTm = function() {
+        return tm.geom.Vector2(this.x, this.y);
+    };
+    
+    tm.geom.Vector3.prototype.toThree = function() {
+        return new THREE.Vector3(this.x, this.y, this.z);
+    };
+    THREE.Vector3.prototype.toTm = function() {
+        return tm.geom.Vector3(this.x, this.y, this.z);
+    };
+    
+    tm.geom.Matrix33.prototype.toThree = function() {
+        return new THREE.Matrix3(
+            this.m00, this.m01, this.m02,
+            this.m10, this.m11, this.m12,
+            this.m20, this.m21, this.m22
+        );
+    };
+    THREE.Matrix3.prototype.toTm = function() {
+        var e = this.elements;
+        return tm.geom.Matrix33(
+            e[0], e[3], e[6],
+            e[1], e[4], e[7],
+            e[2], e[5], e[8]
+        );
+    };
+    
+    tm.geom.Matrix44.prototype.toThree = function() {
+        return new THREE.Matrix4(
+            this.m00, this.m01, this.m02, this.m03,
+            this.m10, this.m11, this.m12, this.m13,
+            this.m20, this.m21, this.m22, this.m23,
+            this.m30, this.m31, this.m32, this.m33
+        );
+    };
+    THREE.Matrix4.prototype.toTm = function() {
+        var e = this.elements;
+        return tm.geom.Matrix44(
+            e[0], e[4], e[8], e[12],
+            e[1], e[5], e[9], e[13],
+            e[2], e[6], e[10], e[14],
+            e[3], e[7], e[11], e[15]
+        );
+    };
+    
 })();
 
 var tm = tm || {};
@@ -1510,6 +1679,9 @@ tm.asset = tm.asset || {};
                 if (mat.specular) mat.specular.setRGB(r*mqoMat.spc, g*mqoMat.spc, b*mqoMat.spc);
                 if (mqoMat.tex) {
                     mat.map = THREE.ImageUtils.loadTexture(_modelPath+"/"+mqoMat.tex);
+                }
+                if (mqoMat.aplane) {
+                    mat.alphaMap = THREE.ImageUtils.loadTexture(_modelPath+"/"+mqoMat.aplane);
                 }
                 mat.transparent = true;
                 mat.shiness = mqoMat.power;
