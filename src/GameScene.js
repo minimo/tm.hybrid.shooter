@@ -36,8 +36,8 @@ tm.define("tmapp.gameScene", {
     },
 
     enterEnemy: function() {
-        var x = (Math.random()*100).floor()-50;
-        var y = (Math.random()*100).floor()-50;
+        var x = rand(0, 100)-50;
+        var y = rand(0, 100)-50;
         var enemy = tmapp.Enemy()
             .addChildTo(this)
             .setPosition(x, y, 1000);
