@@ -49,8 +49,8 @@ tm.define("tmapp.gameScene", {
         var scene = this.three.threeObject;
 
         // touch screen position normalize -1 to 1
-        var mx =  (x/640)*2-1;
-        var my = -(y/640)*2+1;
+        var mx =  (x/SC_W)*2-1;
+        var my = -(y/SC_H)*2+1;
         var pos = new THREE.Vector3(mx, my, 1);
         pos.unproject(camera);
 

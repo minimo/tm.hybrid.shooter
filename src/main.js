@@ -8,7 +8,7 @@
 var mt = new MersenneTwister(0);
 var rand = function(min, max) { return mt.nextInt(min, max); };
 
-var SC_W = 640;
+var SC_W = 960;
 var SC_H = 640;
 
 var toRad = 3.14159/180;    //弧度法toラジアン変換
