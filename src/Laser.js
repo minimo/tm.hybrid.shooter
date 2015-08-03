@@ -20,8 +20,6 @@ tm.define("tmapp.Laser", {
         var mesh = new THREE.Mesh(geo, mat);
 
         this.superInit(mesh);
-        this.threeObject.hybridObject = this;
-
         this.setPosition(from.x+offset, from.y-10, from.z);
         this.lookAt(new THREE.Vector3(x, y, z));
 
@@ -37,6 +35,7 @@ tm.define("tmapp.Laser", {
             this.remove();
         }
         this.setPosition(this.from.x+this.offset, this.from.y-5, this.from.z);
+        this.lookAt(new THREE.Vector3(this.target.x, this.target.y, this.target.z));
         this.time++;
     },
 });

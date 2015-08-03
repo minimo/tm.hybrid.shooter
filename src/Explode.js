@@ -15,8 +15,7 @@ tm.define("tmapp.Explode", {
         this.ele = [];
         var mat = new THREE.MeshPhongMaterial({color: "rgb(255,0,0)"});
         for (var i = 0; i < n; i++) {
-            var size = rand(3, 10);
-
+            var size = rand(1, 10);
             var geo = THREE.CubeGeometry(size, size, size);
             var mesh = new THREE.Mesh(geo, mat);
 
