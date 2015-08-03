@@ -6,49 +6,42 @@
 (function() {
 
 tm.define("tmapp.Explode", {
-    superClass: "tm.hybrid.Mesh",
-    init: function() {
+    superClass: "tm.hybrid.ThreeElement",
+    init: function(n) {
+        this.superInit();
+        n = n || 10;    //生成する破片の数
+
         // 形状データとか準備
-        var geo = THREE.CubeGeometry(10, 10, 10);
-        var mat = new THREE.MeshPhoneMaterial({color: "rgb(255,0,0)"});
-        var mesh = new THREE.Mesh(geo, mat);
+        this.ele = [];
+        var mat = new THREE.MeshPhongMaterial({color: "rgb(255,0,0)"});
+        for (var i = 0; i < n; i++) {
+            var size = rand(3, 10);
 
-        this.superInit(mesh);
-        this.threeObject.hybridObject = this;
+            var geo = THREE.CubeGeometry(size, size, size);
+            var mesh = new THREE.Mesh(geo, mat);
 
-        // ステータス
-        this.hp = 10;
-
+            this.ele[i] = tm.hybrid.ThreeElement(mesh).addChildTo(this);
+            this.ele[i].vx = rand(0, 6)-3;
+            this.ele[i].vy = rand(0, 6)-3;
+            this.ele[i].vz = rand(0, 6)-3;
+            this.ele[i].update = function(){
+                this.x += this.vx;  this.vx *= 0.9;
+                this.y += this.vy;  this.vy *= 0.9;
+                this.z += this.vz;  this.vz *= 0.9;
+                if (Math.abs(this.vx) < 0.3) this.remove();
+                this.rotation.x += 1;
+                this.rotation.y += 1;
+                this.rotation.z += 1;
+            };
+        }
         this.time = 0;
     },
 
     update: function() {
-        this.position.z -= 5;
-        this.rotation.x += 0.01;
-        this.rotation.z += 0.01;
-
-        if (this.position.z < 0) {
+        if (this.time > 60) {
             this.remove();
-            delete threeObject;
         }
-
         this.time++;
-    },
-
-    damage: function(power) {
-        power = power || 0;
-        this.hp -= power;
-        if (this.hp < 0) {
-            this.explode();
-            this.remove();
-            delete threeObject;
-            return true;
-        }
-        return false;
-    },
-
-    explode: function() {
-        var scene = this.parentScene;
     },
 });
 

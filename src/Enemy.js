@@ -49,6 +49,9 @@ tm.define("tmapp.Enemy", {
 
     explode: function() {
         var scene = this.parentScene;
+        var ex = tmapp.Explode(30)
+            .addChildTo(scene)
+            .setPosition(this.x, this.y, this.z);
     },
 });
 
