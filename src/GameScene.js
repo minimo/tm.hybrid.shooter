@@ -31,7 +31,8 @@ tm.define("tmapp.gameScene", {
     },
 
     enterLaser: function(target) {
-        var laser = tmapp.Laser(target).addChildTo(this);
+        tmapp.Laser(target, 5).addChildTo(this);
+        tmapp.Laser(target,-5).addChildTo(this);
     },
 
     enterEnemy: function() {

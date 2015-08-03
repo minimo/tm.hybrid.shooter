@@ -24,14 +24,18 @@ tm.define("tmapp.Explode", {
             this.ele[i].vx = rand(0, 6)-3;
             this.ele[i].vy = rand(0, 6)-3;
             this.ele[i].vz = rand(0, 6)-3;
+            this.ele[i].rx = (rand(0, 6)-3)*0.01;
+            this.ele[i].ry = (rand(0, 6)-3)*0.01;
+            this.ele[i].rz = (rand(0, 6)-3)*0.01;
             this.ele[i].update = function(){
                 this.x += this.vx;  this.vx *= 0.9;
                 this.y += this.vy;  this.vy *= 0.9;
                 this.z += this.vz;  this.vz *= 0.9;
-                if (Math.abs(this.vx) < 0.3) this.remove();
-                this.rotation.x += 1;
-                this.rotation.y += 1;
-                this.rotation.z += 1;
+                this.rotation.x += this.rx;
+                this.rotation.y += this.ry;
+                this.rotation.z += this.rz;
+                var v = Math.abs(this.vx)+Math.abs(this.vy)+Math.abs(this.vz);
+                if (v < 0.3) this.remove();
             };
         }
         this.time = 0;
