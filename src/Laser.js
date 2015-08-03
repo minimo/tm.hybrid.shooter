@@ -7,7 +7,7 @@
 
 tm.define("tmapp.Laser", {
     superClass: "tm.hybrid.Mesh",
-    init: function(target, offset) {
+    init: function(from, target, offset) {
         offset = offset || 5;
         // 着弾点
         var x = target.x;
@@ -22,9 +22,12 @@ tm.define("tmapp.Laser", {
         this.superInit(mesh);
         this.threeObject.hybridObject = this;
 
-        this.setPosition(offset, -10, 0);
+        this.setPosition(from.x+offset, from.y-10, from.z);
         this.lookAt(new THREE.Vector3(x, y, z));
 
+        this.from = from;
+        this.offset = offset;
+        this.target = target;
         this.time = 0;
     },
 
@@ -33,6 +36,7 @@ tm.define("tmapp.Laser", {
             var that = this;
             this.remove();
         }
+        this.setPosition(this.from.x+this.offset, this.from.y-5, this.from.z);
         this.time++;
     },
 });

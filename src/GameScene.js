@@ -11,6 +11,7 @@ tm.define("tmapp.gameScene", {
         // カメラ調整
         this.camera.setPosition(0, 0, 0);
         this.camera.lookAt(new THREE.Vector3(0, 0, 10));
+        this.player = this.camera;
 
         // ライト
         this.directionalLight.setPosition(0, 100, 80);
@@ -31,8 +32,8 @@ tm.define("tmapp.gameScene", {
     },
 
     enterLaser: function(target) {
-        tmapp.Laser(target, 5).addChildTo(this);
-        tmapp.Laser(target,-5).addChildTo(this);
+        tmapp.Laser(this.player, target, 5).addChildTo(this);
+        tmapp.Laser(this.player, target,-5).addChildTo(this);
     },
 
     enterEnemy: function() {
