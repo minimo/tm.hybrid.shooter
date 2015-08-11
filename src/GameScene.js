@@ -23,6 +23,10 @@ tm.define("tmapp.gameScene", {
         this.gauage.tweener.clear();
         this.gauage.tweener.to({value: 0}, 1000).wait(500).to({value: 100}, 1000).wait(500).setLoop(true);
 
+        this.player = tm.hybrid.Sprite("iron")
+            .addChildTo(this)
+            .setPosition(0 , -1, 10);
+
         this.time = 1;
     },
 

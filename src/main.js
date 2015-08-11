@@ -26,6 +26,9 @@ tm.main(function() {
     app.replaceScene(tm.game.LoadingScene({
         width: SC_W, height: SC_H,
         assets: {
+            iron: "assets/iron_fossil.mqo",
+            silverhawk: "assets/silverhawk.mqo",
+            r9c: "assets/R-9C.mqo",
             Orbitron: "fonts/Orbitron-Regular.ttf",
         },
         nextScene: tmapp.gameScene,
